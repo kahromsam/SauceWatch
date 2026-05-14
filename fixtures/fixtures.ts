@@ -3,12 +3,17 @@ import { LoginPage } from '../pages/LoginPage';
 import { InventoryPage } from '../pages/InventoryPage';
 import { CartPage } from '../pages/CartPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
+import { getActiveUser } from '../test-data/users';
+import type { UserKey } from '../test-data/users';
 
 type Pages = {
   loginPage: LoginPage;
   inventoryPage: InventoryPage;
   cartPage: CartPage;
   checkoutPage: CheckoutPage;
+  // The user selected by the TEST_USER env var (defaults to standard_user).
+  // Use in integrity test beforeEach blocks so the suite is user-configurable.
+  testUser: ReturnType<typeof getActiveUser>;
 };
 
 // Extends base test with page object instances.
@@ -26,6 +31,10 @@ export const test = base.extend<Pages>({
   checkoutPage: async ({ page }, use) => {
     await use(new CheckoutPage(page));
   },
+  testUser: async ({}, use) => {
+    await use(getActiveUser());
+  },
 });
 
 export { expect } from '@playwright/test';
+export type { UserKey };
