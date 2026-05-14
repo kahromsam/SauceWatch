@@ -37,11 +37,11 @@ npx playwright test
 
 ### Run a specific test file
 ```bash
-npx playwright test tests/login.spec.ts
-npx playwright test tests/checkout.spec.ts
-npx playwright test tests/cart.spec.ts
-npx playwright test tests/product-integrity.spec.ts
-npx playwright test tests/visual-integrity.spec.ts
+npx playwright test tests/01-login.spec.ts
+npx playwright test tests/02-checkout.spec.ts
+npx playwright test tests/03-cart.spec.ts
+npx playwright test tests/04-product-integrity.spec.ts
+npx playwright test tests/05-visual-integrity.spec.ts
 ```
 
 ### Run integrity tests as a specific user
@@ -51,14 +51,14 @@ Valid values: `standard_user`, `locked_out_user`, `problem_user`, `visual_user`,
 
 **Windows (PowerShell):**
 ```powershell
-$env:TEST_USER="problem_user"; npx playwright test tests/product-integrity.spec.ts
-$env:TEST_USER="visual_user";  npx playwright test tests/visual-integrity.spec.ts
+$env:TEST_USER="problem_user"; npx playwright test tests/04-product-integrity.spec.ts
+$env:TEST_USER="visual_user";  npx playwright test tests/05-visual-integrity.spec.ts
 ```
 
 **macOS / Linux:**
 ```bash
-TEST_USER=problem_user npx playwright test tests/product-integrity.spec.ts
-TEST_USER=visual_user  npx playwright test tests/visual-integrity.spec.ts
+TEST_USER=problem_user npx playwright test tests/04-product-integrity.spec.ts
+TEST_USER=visual_user  npx playwright test tests/05-visual-integrity.spec.ts
 ```
 
 ### Open the interactive UI
@@ -77,10 +77,10 @@ npx playwright show-report
 
 | Test file | User | Expected outcome |
 |---|---|---|
-| `login.spec.ts` | `standard_user` / `locked_out_user` | All pass |
-| `checkout.spec.ts` | `standard_user` | All pass |
-| `cart.spec.ts` | `standard_user` | All pass |
-| `product-integrity.spec.ts` | `problem_user` | Fails — exposes image and data bugs |
-| `visual-integrity.spec.ts` | `visual_user` | Fails — exposes price mutation bug |
+| `01-login.spec.ts` | `standard_user` / `locked_out_user` | All pass |
+| `02-checkout.spec.ts` | `standard_user` | All pass |
+| `03-cart.spec.ts` | `standard_user` | All pass |
+| `04-product-integrity.spec.ts` | `problem_user` | Fails — exposes image and data bugs |
+| `05-visual-integrity.spec.ts` | `visual_user` | Fails — exposes price mutation bug |
 
 Failing tests for buggy users are **intentional** — a failing test is a bug report.
