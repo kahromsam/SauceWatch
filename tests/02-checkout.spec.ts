@@ -1,32 +1,19 @@
 import { test, expect } from '../fixtures/fixtures';
-import { users } from '../test-data/users';
 
 const PRODUCT = 'Sauce Labs Backpack';
 
-test.beforeEach(async ({ loginPage, inventoryPage }) => {
+test.beforeEach(async ({ loginPage, inventoryPage, testUser }) => {
   await loginPage.goto();
-  await loginPage.login(users.standard_user.username, users.standard_user.password);
+  await loginPage.login(testUser.username, testUser.password);
   await expect(inventoryPage.heading).toBeVisible();
 });
 
-test('full checkout flow: button state, cart badge, validation, and order confirmation', async ({
+test('full checkout flow: form validation and order confirmation', async ({
   inventoryPage,
   cartPage,
   checkoutPage,
 }) => {
-  // --- Add to cart ---
-  // User adds a product and expects the button to switch to "Remove"
-  await inventoryPage.addToCartButton(PRODUCT).click();
-  await expect(inventoryPage.removeButton(PRODUCT)).toBeVisible();
-  await expect(inventoryPage.cartBadge).toHaveText('1');
-
-  // --- Remove from cart ---
-  // User removes it and expects the button to revert and the badge to disappear
-  await inventoryPage.removeButton(PRODUCT).click();
-  await expect(inventoryPage.addToCartButton(PRODUCT)).toBeVisible();
-  await expect(inventoryPage.cartBadge).not.toBeVisible();
-
-  // --- Add again and proceed to cart ---
+  // --- Add a product and proceed to cart ---
   await inventoryPage.addToCartButton(PRODUCT).click();
   await inventoryPage.navigateToCart();
   await expect(cartPage.cartItems().filter({ hasText: PRODUCT })).toBeVisible();

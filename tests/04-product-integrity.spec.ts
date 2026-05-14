@@ -75,6 +75,21 @@ test('product descriptions do not overflow outside their card', async ({ invento
   });
 });
 
+test('every add-to-cart button works and updates the cart badge', async ({ inventoryPage }) => {
+  // Click every product's Add to cart button in sequence and verify:
+  // 1. The cart badge increments to the expected count
+  // 2. The button switches to "Remove" — confirming the item was actually added
+  // problem_user has broken buttons on some products; those will fail here
+  const titles = await inventoryPage.allProductTitles();
+
+  for (let i = 0; i < titles.length; i++) {
+    const name = titles[i];
+    await inventoryPage.addToCartButton(name).click();
+    await expect(inventoryPage.cartBadge, `Badge did not increment after adding "${name}"`).toHaveText(String(i + 1));
+    await expect(inventoryPage.removeButton(name), `Remove button did not appear for "${name}"`).toBeVisible();
+  }
+});
+
 test('add-to-cart buttons are within their product card', async ({ inventoryPage }) => {
   // A button rendered outside its card boundaries is a layout bug (visible on visual_user)
   const overflows = await inventoryPage.productCards.evaluateAll(cards =>

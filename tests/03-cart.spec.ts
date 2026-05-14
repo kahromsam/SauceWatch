@@ -1,11 +1,10 @@
 import { test, expect } from '../fixtures/fixtures';
-import { users } from '../test-data/users';
 
 const PRODUCT = 'Sauce Labs Backpack';
 
-test.beforeEach(async ({ loginPage, inventoryPage }) => {
+test.beforeEach(async ({ loginPage, inventoryPage, testUser }) => {
   await loginPage.goto();
-  await loginPage.login(users.standard_user.username, users.standard_user.password);
+  await loginPage.login(testUser.username, testUser.password);
   await expect(inventoryPage.heading).toBeVisible();
 });
 

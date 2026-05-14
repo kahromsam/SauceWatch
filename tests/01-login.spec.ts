@@ -3,10 +3,10 @@ import { users } from '../test-data/users';
 
 // No shared beforeEach — these tests exercise the login flow itself.
 
-test('standard_user can log in and land on the inventory page', async ({ page, loginPage, inventoryPage }) => {
-  // A valid user navigates to the site and submits credentials
+test('active user can log in and land on the inventory page', async ({ page, loginPage, inventoryPage, testUser }) => {
+  // The user selected by TEST_USER (default: standard_user) navigates to the site and logs in
   await loginPage.goto();
-  await loginPage.login(users.standard_user.username, users.standard_user.password);
+  await loginPage.login(testUser.username, testUser.password);
 
   // The app redirects to /inventory.html and shows the product catalogue heading
   await expect(page).toHaveURL(/\/inventory\.html$/);
