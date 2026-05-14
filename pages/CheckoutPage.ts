@@ -17,7 +17,9 @@ export class CheckoutPage {
     this.continueButton = page.getByTestId('continue');
     this.finishButton = page.getByTestId('finish');
     this.errorMessage = page.getByTestId('error');
-    this.orderSummaryHeader = page.getByRole('heading', { name: 'Checkout: Overview' });
+    // Checkout pages use <span class="title">, not a semantic heading element.
+    // Filter by text so each locator is tied to the correct page step.
+    this.orderSummaryHeader = page.getByTestId('title').filter({ hasText: 'Checkout: Overview' });
     this.confirmationHeader = page.getByRole('heading', { name: 'Thank you for your order!' });
   }
 

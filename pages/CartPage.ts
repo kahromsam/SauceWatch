@@ -9,8 +9,9 @@ export class CartPage {
     this.checkoutButton = page.getByTestId('checkout');
   }
 
+  // Cart item containers use .cart_item — no data-test attribute exists on this element
   cartItems(): Locator {
-    return this.page.getByTestId('cart-item');
+    return this.page.locator('.cart_item');
   }
 
   async itemNames(): Promise<string[]> {
@@ -19,7 +20,7 @@ export class CartPage {
 
   async removeItem(productName: string) {
     await this.page
-      .getByTestId('cart-item')
+      .locator('.cart_item')
       .filter({ hasText: productName })
       .getByRole('button', { name: 'Remove' })
       .click();
