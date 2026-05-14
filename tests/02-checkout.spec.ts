@@ -8,7 +8,37 @@ test.beforeEach(async ({ loginPage, inventoryPage, testUser }) => {
   await expect(inventoryPage.heading).toBeVisible();
 });
 
-test('full checkout flow: form validation and order confirmation', async ({
+test('checkout form requires first name, last name, and zip code', async ({
+  inventoryPage,
+  cartPage,
+  checkoutPage,
+}) => {
+  await inventoryPage.addToCartButton(PRODUCT).click();
+  await inventoryPage.navigateToCart();
+  await cartPage.checkout();
+
+  // Submitting empty form must show an error
+  await checkoutPage.continue();
+  await expect(checkoutPage.errorMessage).toBeVisible();
+
+  // Submitting with only first name must still show an error
+  await checkoutPage.fillInfo('Ismo', '', '');
+  await checkoutPage.continue();
+  await expect(checkoutPage.errorMessage).toBeVisible();
+
+  // Submitting with first + last but no zip must still show an error
+  await checkoutPage.fillInfo('Ismo', 'Laitela', '');
+  await checkoutPage.continue();
+  await expect(checkoutPage.errorMessage).toBeVisible();
+
+  // All three fields filled — error must clear and form must advance
+  await checkoutPage.fillInfo('Ismo', 'Laitela', '12345');
+  await checkoutPage.continue();
+  await expect(checkoutPage.errorMessage).not.toBeVisible();
+  await expect(checkoutPage.orderSummaryHeader).toBeVisible();
+});
+
+test('full checkout flow completes with valid shipping info', async ({
   inventoryPage,
   cartPage,
   checkoutPage,
@@ -18,15 +48,9 @@ test('full checkout flow: form validation and order confirmation', async ({
   await inventoryPage.navigateToCart();
   await expect(cartPage.cartItems().filter({ hasText: PRODUCT })).toBeVisible();
 
-  // --- Start checkout ---
+  // --- Start checkout and fill valid info ---
   await cartPage.checkout();
-
-  // --- Validation: submitting with an empty first name must show an error ---
-  await checkoutPage.continue();
-  await expect(checkoutPage.errorMessage).toBeVisible();
-
-  // --- Fill in shipping info and continue to order summary ---
-  await checkoutPage.fillInfo('Jane', 'Doe', '12345');
+  await checkoutPage.fillInfo('Ismo', 'Laitela', '12345');
   await checkoutPage.continue();
   await expect(checkoutPage.orderSummaryHeader).toBeVisible();
 

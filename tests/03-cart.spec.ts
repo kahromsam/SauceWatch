@@ -8,6 +8,28 @@ test.beforeEach(async ({ loginPage, inventoryPage, testUser }) => {
   await expect(inventoryPage.heading).toBeVisible();
 });
 
+test('all sort options produce the correct order', async ({ inventoryPage }) => {
+  // A-Z: titles must be in ascending alphabetical order
+  await inventoryPage.sortBy('az');
+  const titlesAZ = await inventoryPage.allProductTitles();
+  expect(titlesAZ).toEqual([...titlesAZ].sort((a, b) => a.localeCompare(b)));
+
+  // Z-A: "Test.allTheThings() T-Shirt (Red)" should be first
+  await inventoryPage.sortBy('za');
+  const firstZA = await inventoryPage.firstProductName();
+  expect(firstZA.charAt(0).toUpperCase()).toBe('T');
+
+  // Price low→high: numeric values must be non-decreasing
+  await inventoryPage.sortBy('lohi');
+  const pricesLoHi = (await inventoryPage.allProductPrices()).map(p => parseFloat(p.replace('$', '')));
+  expect(pricesLoHi).toEqual([...pricesLoHi].sort((a, b) => a - b));
+
+  // Price high→low: numeric values must be non-increasing
+  await inventoryPage.sortBy('hilo');
+  const pricesHiLo = (await inventoryPage.allProductPrices()).map(p => parseFloat(p.replace('$', '')));
+  expect(pricesHiLo).toEqual([...pricesHiLo].sort((a, b) => b - a));
+});
+
 test('cart persists across sorting and navigation, and item can be removed', async ({
   page,
   inventoryPage,
@@ -17,11 +39,8 @@ test('cart persists across sorting and navigation, and item can be removed', asy
   await inventoryPage.addToCartButton(PRODUCT).click();
   await expect(inventoryPage.cartBadge).toHaveText('1');
 
-  // --- Sort Z-A and verify the list reorders without touching cart state ---
-  // "Test.allTheThings() T-Shirt (Red)" sorts above all "Sauce Labs ..." products
+  // --- Sort Z-A and verify cart badge survives reorder ---
   await inventoryPage.sortBy('za');
-  const firstName = await inventoryPage.firstProductName();
-  expect(firstName.charAt(0).toUpperCase()).toBe('T');
   await expect(inventoryPage.cartBadge).toHaveText('1');
 
   // --- Navigate to an external page and back, then confirm cart survives ---

@@ -14,6 +14,8 @@ Priority labels: **Critical** · **High** · **Medium** · **Low**
 | 7 | Product title text is right-aligned (`text-align: right` via class `align_right`) for "Sauce Labs Bolt T-Shirt" and "Sauce Labs Fleece Jacket" | `visual_user` | `product-integrity.spec.ts` — title alignment | **Medium** |
 | 9 | Add-to-cart button for "Sauce Labs Bolt T-Shirt" (card 3) does not increment the cart badge — item is not added | `problem_user` | `product-integrity.spec.ts` — button functionality | **High** |
 | 10 | Add-to-cart button for "Test.allTheThings() T-Shirt (Red)" (card 6) renders outside its product card boundaries | `visual_user` | `product-integrity.spec.ts` — button overflow | **Medium** |
+| 11 | Cart icon is positioned outside the page header (`.primary_header`) — element exists but is displaced from its intended container | `visual_user` | `visual-integrity.spec.ts` — cart icon in header | **High** |
+| 12 | Burger menu icon (`img.bm-icon`) is rotated ~3° via CSS `transform` (`sin ≈ 0.0523`) — visually tilted relative to expected upright orientation | `visual_user` | `visual-integrity.spec.ts` — burger icon rotation | **Medium** |
 | 8 | Page title ("Products", "Checkout: Overview") rendered as `<span>` with no heading role — fails accessibility standards | all users | Discovered during locator implementation | **Low** |
 
 ---
