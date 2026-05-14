@@ -15,7 +15,9 @@ export class InventoryPage {
   readonly productPrices: Locator;
 
   constructor(private readonly page: Page) {
-    this.heading = page.getByRole('heading', { name: 'Products' });
+    // The page title is a <span class="title">, not a semantic heading element.
+    // getByTestId is the best available semantic locator here.
+    this.heading = page.getByTestId('title');
     this.cartBadge = page.getByTestId('shopping-cart-badge');
     this.cartIcon = page.getByTestId('shopping-cart-link');
     this.sortDropdown = page.getByTestId('product-sort-container');
