@@ -37,26 +37,22 @@ test('product descriptions do not contain raw code artefacts', async ({ inventor
 });
 
 test('product title text is left-aligned', async ({ inventoryPage }) => {
-  // Walk every ancestor from the title up to (but not including) the card boundary.
-  // visual_user applies text-align: center several levels above .inventory_item_name,
-  // so a single-level parent check is not enough.
+  // visual_user adds class "align_right" to some titles, setting text-align: right.
+  // Any non-left/start alignment on the title element is a bug.
   const alignResults = await inventoryPage.productCards.evaluateAll(cards =>
     cards.map((card, i) => {
       const title = card.querySelector('.inventory_item_name');
-      if (!title) return { index: i, centered: false };
-      let node: Element | null = title;
-      while (node && node !== card) {
-        if (getComputedStyle(node).textAlign === 'center') {
-          return { index: i, centered: true };
-        }
-        node = node.parentElement;
-      }
-      return { index: i, centered: false };
+      if (!title) return { index: i, align: 'start' };
+      const align = getComputedStyle(title).textAlign;
+      return { index: i, align };
     })
   );
 
-  alignResults.forEach(({ index, centered }) => {
-    expect(centered, `Card ${index + 1} title is centered instead of left-aligned`).toBe(false);
+  alignResults.forEach(({ index, align }) => {
+    expect(
+      align,
+      `Card ${index + 1} title has unexpected alignment "${align}" — expected left or start`
+    ).toMatch(/^(left|start)$/);
   });
 });
 

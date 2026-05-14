@@ -6,18 +6,18 @@
 
 # Test info
 
-- Name: 04-product-integrity.spec.ts >> product descriptions do not contain raw code artefacts
-- Location: tests\04-product-integrity.spec.ts:31:5
+- Name: 04-product-integrity.spec.ts >> add-to-cart buttons are within their product card
+- Location: tests\04-product-integrity.spec.ts:89:5
 
 # Error details
 
 ```
-Error: Suspicious description: "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection."
+Error: Card 6 button is outside its product card
 
-expect(received).not.toMatch(expected)
+expect(received).toBe(expected) // Object.is equality
 
-Expected pattern: not /\w\(\)/
-Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection."
+Expected: false
+Received: true
 ```
 
 # Page snapshot
@@ -71,7 +71,7 @@ Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack
               - generic [ref=e41]: Sauce Labs Backpack
             - generic [ref=e42]: carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.
           - generic [ref=e43]:
-            - generic [ref=e44]: $51.76
+            - generic [ref=e44]: $71.16
             - button "Add to cart" [ref=e45] [cursor=pointer]
       - generic [ref=e46]:
         - link "Sauce Labs Bike Light" [ref=e48] [cursor=pointer]:
@@ -84,7 +84,7 @@ Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack
               - generic [ref=e53]: Sauce Labs Bike Light
             - generic [ref=e54]: A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included.
           - generic [ref=e55]:
-            - generic [ref=e56]: $90.66
+            - generic [ref=e56]: $27.16
             - button "Add to cart" [ref=e57] [cursor=pointer]
       - generic [ref=e58]:
         - link "Sauce Labs Bolt T-Shirt" [ref=e60] [cursor=pointer]:
@@ -97,7 +97,7 @@ Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack
               - generic [ref=e65]: Sauce Labs Bolt T-Shirt
             - generic [ref=e66]: Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt.
           - generic [ref=e67]:
-            - generic [ref=e68]: $78.06
+            - generic [ref=e68]: $15.36
             - button "Add to cart" [ref=e69] [cursor=pointer]
       - generic [ref=e70]:
         - link "Sauce Labs Fleece Jacket" [ref=e72] [cursor=pointer]:
@@ -110,7 +110,7 @@ Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack
               - generic [ref=e77]: Sauce Labs Fleece Jacket
             - generic [ref=e78]: It's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office.
           - generic [ref=e79]:
-            - generic [ref=e80]: $95.75
+            - generic [ref=e80]: $59.98
             - button "Add to cart" [ref=e81] [cursor=pointer]
       - generic [ref=e82]:
         - link "Sauce Labs Onesie" [ref=e84] [cursor=pointer]:
@@ -123,7 +123,7 @@ Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack
               - generic [ref=e89]: Sauce Labs Onesie
             - generic [ref=e90]: Rib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel.
           - generic [ref=e91]:
-            - generic [ref=e92]: $44.3
+            - generic [ref=e92]: $1.55
             - button "Add to cart" [ref=e93] [cursor=pointer]
       - generic [ref=e94]:
         - link "Test.allTheThings() T-Shirt (Red)" [ref=e96] [cursor=pointer]:
@@ -136,7 +136,7 @@ Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack
               - generic [ref=e101]: Test.allTheThings() T-Shirt (Red)
             - generic [ref=e102]: This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton.
           - generic [ref=e103]:
-            - generic [ref=e104]: $7.88
+            - generic [ref=e104]: $95.96
             - button "Add to cart" [ref=e105] [cursor=pointer]
   - contentinfo [ref=e106]:
     - list [ref=e107]:
@@ -155,12 +155,6 @@ Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack
 # Test source
 
 ```ts
-  1   | import { test, expect } from '../fixtures/fixtures';
-  2   | 
-  3   | // Assertions reflect what a HEALTHY site should look like.
-  4   | // Failing tests are bug reports, not test errors.
-  5   | // Run with: TEST_USER=problem_user npx playwright test tests/product-integrity.spec.ts
-  6   | // Run with: TEST_USER=visual_user  npx playwright test tests/product-integrity.spec.ts
   7   | 
   8   | test.beforeEach(async ({ loginPage, inventoryPage, testUser }) => {
   9   |   await loginPage.goto();
@@ -189,8 +183,7 @@ Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack
   32  |   const descriptions = await inventoryPage.allProductDescriptions();
   33  | 
   34  |   descriptions.forEach(description => {
-> 35  |     expect(description, `Suspicious description: "${description}"`).not.toMatch(/\w\(\)/);
-      |                                                                         ^ Error: Suspicious description: "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection."
+  35  |     expect(description, `Suspicious description: "${description}"`).not.toMatch(/\w\(\)/);
   36  |   });
   37  | });
   38  | 
@@ -262,7 +255,8 @@ Received string:      "carry.allTheThings() with the sleek, streamlined Sly Pack
   104 |   );
   105 | 
   106 |   overflows.forEach((overflow, i) => {
-  107 |     expect(overflow, `Card ${i + 1} button is outside its product card`).toBe(false);
+> 107 |     expect(overflow, `Card ${i + 1} button is outside its product card`).toBe(false);
+      |                                                                          ^ Error: Card 6 button is outside its product card
   108 |   });
   109 | });
   110 | 

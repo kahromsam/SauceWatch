@@ -11,7 +11,9 @@ Priority labels: **Critical** · **High** · **Medium** · **Low**
 | 4 | Login response time exceeds 5 s action timeout; request eventually times out | `performance_glitch_user` | `playwright.config.ts` `actionTimeout: 5000` | **High** |
 | 5 | Product titles contain method-call syntax (`Test.allTheThings()`) — code artifact in product data | all users | `product-integrity.spec.ts` — title code artefacts | **Medium** |
 | 6 | Product descriptions contain method-call syntax (`carry.allTheThings()`) — code artifact in product data | all users | `product-integrity.spec.ts` — description code artefacts | **Medium** |
-| 7 | Product title text alignment is broken (visually centered) for some items | `visual_user` | `product-integrity.spec.ts` — title alignment | **Medium** |
+| 7 | Product title text is right-aligned (`text-align: right` via class `align_right`) for "Sauce Labs Bolt T-Shirt" and "Sauce Labs Fleece Jacket" | `visual_user` | `product-integrity.spec.ts` — title alignment | **Medium** |
+| 9 | Add-to-cart button for "Sauce Labs Bolt T-Shirt" (card 3) does not increment the cart badge — item is not added | `problem_user` | `product-integrity.spec.ts` — button functionality | **High** |
+| 10 | Add-to-cart button for "Test.allTheThings() T-Shirt (Red)" (card 6) renders outside its product card boundaries | `visual_user` | `product-integrity.spec.ts` — button overflow | **Medium** |
 | 8 | Page title ("Products", "Checkout: Overview") rendered as `<span>` with no heading role — fails accessibility standards | all users | Discovered during locator implementation | **Low** |
 
 ---
