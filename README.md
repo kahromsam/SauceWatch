@@ -84,3 +84,9 @@ npx playwright show-report
 | `05-visual-integrity.spec.ts` | `visual_user` | Fails — exposes price mutation, cart icon displacement, and burger icon rotation bugs |
 
 Failing tests for buggy users are **intentional** — a failing test is a bug report.
+
+---
+
+## Development time
+
+Total time from first commit to finished suite: **2 hours 25 minutes** (2026-05-14).
