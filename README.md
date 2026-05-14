@@ -81,6 +81,6 @@ npx playwright show-report
 | `02-checkout.spec.ts` | `standard_user` | All pass |
 | `03-cart.spec.ts` | `standard_user` | All pass |
 | `04-product-integrity.spec.ts` | `problem_user` | Fails — exposes image and data bugs |
-| `05-visual-integrity.spec.ts` | `visual_user` | Fails — exposes price mutation bug |
+| `05-visual-integrity.spec.ts` | `visual_user` | Fails — exposes price mutation, cart icon displacement, and burger icon rotation bugs |
 
 Failing tests for buggy users are **intentional** — a failing test is a bug report.
