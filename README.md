@@ -83,7 +83,19 @@ npx playwright show-report
 | `04-product-integrity.spec.ts` | `problem_user` | Fails — exposes image and data bugs |
 | `05-visual-integrity.spec.ts` | `visual_user` | Fails — exposes price mutation, cart icon displacement, and burger icon rotation bugs |
 
-Failing tests for buggy users are **intentional** — a failing test is a bug report.
+| Any test file | `performance_glitch_user` | Fails — login exceeds the 5 s `actionTimeout` set in `playwright.config.ts`, exposing a slow-login performance bug |
+
+Failing tests for buggy users are **intentional** — a failing test is a bug report. See [`test_plan.md`](test_plan.md) for the full bug table.
+
+---
+
+## Documentation
+
+| File | Purpose |
+|---|---|
+| [`test_design.md`](test_design.md) | Key features and risks covered, and the reasoning behind test selection |
+| [`test_plan.md`](test_plan.md) | Full bug report table — every defect found, which user triggers it, and which test detects it |
+| [`ai_usage.md`](ai_usage.md) | How AI was used during development |
 
 ---
 
