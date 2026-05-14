@@ -10,6 +10,8 @@ export default defineConfig({
     baseURL: 'https://www.saucedemo.com',
     actionTimeout: 5000,
     trace: 'on',
+    // saucedemo uses data-test="..." not data-testid="..."
+    testIdAttribute: 'data-test',
   },
 
   reporter: [['html', { open: 'never' }]],
