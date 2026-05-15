@@ -28,6 +28,16 @@ npx playwright install
 
 ---
 
+## Quick start
+
+```bash
+npx playwright test --ui
+```
+
+Runs the full suite as `standard_user` in interactive UI mode.
+
+---
+
 ## Running tests
 
 ### Run the full suite
